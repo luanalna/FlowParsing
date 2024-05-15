@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.Linq;
 using System.IO;
 
-// wtf
 public class ExperimentGenerator : MonoBehaviour
 {
     // Canvas elements for different phases of the experiment
@@ -15,9 +14,6 @@ public class ExperimentGenerator : MonoBehaviour
 
     // UI Button to proceed to the next block of trials
     public Button continueButton;
-
-    // Reference to the draggable stick GameObject to be shown during the question phase
-    public GameObject Stick;
 
     // Text UI for displaying the angle of the draggable stick
     public Text angleDisplay;
@@ -53,9 +49,6 @@ public class ExperimentGenerator : MonoBehaviour
         ExperimentManager.startTargetFalling = false;
         targetStartingVelocities = GenerateRandomVectors(ExperimentManager.numberOfTrials);
         ExperimentManager.startCameraRotating = false;
-
-        // Initially disable the draggable stick
-        Stick.SetActive(false);
     }
 
     void Update()
@@ -185,7 +178,6 @@ public class ExperimentGenerator : MonoBehaviour
     void RecordAnswer()
     {
         questionPanel.gameObject.SetActive(true);
-        Stick.SetActive(true); // Activate the draggable stick during the question phase
         if (Input.anyKeyDown)
         {
             AnswerManager.ListenAndRecordAnswer();

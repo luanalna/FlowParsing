@@ -19,6 +19,8 @@ public class VRInputModule : BaseInputModule
         Data.pointerCurrentRaycast = FindFirstRaycast(m_RaycastResultCache);
 
         HandlePointerExitAndEnter(Data, Data.pointerCurrentRaycast.gameObject);
+
+        ExecuteEvents.Execute(Data.pointerDrag, Data, ExecuteEvents.beginDragHandler);
     }
 
     public void Press()
@@ -26,8 +28,10 @@ public class VRInputModule : BaseInputModule
         Data.pointerPressRaycast = Data.pointerCurrentRaycast;
 
         Data.pointerPress = ExecuteEvents.GetEventHandler<IPointerClickHandler>(Data.pointerPressRaycast.gameObject);
+        Data.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(Data.pointerPressRaycast.gameObject);
 
         ExecuteEvents.Execute(Data.pointerPress, Data, ExecuteEvents.pointerDownHandler);
+        ExecuteEvents.Execute(Data.pointerDrag, Data, ExecuteEvents.beginDragHandler);
     }
 
     public void Release()
@@ -38,8 +42,10 @@ public class VRInputModule : BaseInputModule
             ExecuteEvents.Execute(Data.pointerPress, Data, ExecuteEvents.pointerClickHandler);
 
         ExecuteEvents.Execute(Data.pointerPress, Data, ExecuteEvents.pointerUpHandler);
+        ExecuteEvents.Execute(Data.pointerDrag, Data, ExecuteEvents.endDragHandler);
 
         Data.pointerPress = null;
+        Data.pointerDrag = null;
 
         Data.pointerCurrentRaycast.Clear();
     }

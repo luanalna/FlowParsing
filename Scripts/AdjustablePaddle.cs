@@ -21,4 +21,10 @@ public class AdjustablePaddle : MonoBehaviour
         // Rotate the stick based on the slider value
         draggableStick.localEulerAngles = new Vector3(0, 0, value);
     }
+        public void ResetSlider()
+    {
+        // Reset the slider to 0 and update the stick angle accordingly
+        angleSlider.value = 0;
+        UpdateStickAngle(0);
+    }
 }

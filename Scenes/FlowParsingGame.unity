@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.09181083, g: 0.09337396, b: 0.1518588, a: 1}
+  m_IndirectSpecularColor: {r: 0.09181083, g: 0.093374155, b: 0.1518588, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -413,8 +413,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   csvFile: {fileID: 4900000, guid: e3ad1cd6f4f8048179ddf8ac006275af, type: 3}
   CameraDir: 0
-  TargetDir: 0
-  Angle: 0
+  TargetVelocity: 0
+  FallAngle: 0
+  ResponseAngle: 0
+  Name_subject: Luana
+  Surname_subject: Patatella
+  Number_subject: 0
 --- !u!4 &330638006
 Transform:
   m_ObjectHideFlags: 0
@@ -666,14 +670,14 @@ RectTransform:
   m_GameObject: {fileID: 528227753}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.03, y: 4.9, z: 0.5}
+  m_LocalScale: {x: -0.03, y: 3.15, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1820163880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.001953125, y: 131}
+  m_AnchoredPosition: {x: -0.001953125, y: 38}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &528227755
@@ -750,7 +754,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4, y: -308}
+  m_AnchoredPosition: {x: -4, y: 141}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &635841317
@@ -974,7 +978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1024643292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1431,16 +1435,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343574385}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.03, y: 4.9, z: 0.5}
+  m_LocalScale: {x: -0.03, y: 3.15, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1820163880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.001953125, y: 131}
+  m_AnchoredPosition: {x: -0.001953125, y: 38}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1343574387
@@ -1513,6 +1517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingTargetPosition: {x: 0, y: 9, z: 20}
+  fallVelocity: {x: 0, y: 0, z: 0}
   fall: 0
 --- !u!23 &1372675562
 MeshRenderer:
@@ -1958,8 +1963,6 @@ MonoBehaviour:
   endPanel: {fileID: 152386609}
   endBlockPanel: {fileID: 1024643294}
   startButton: {fileID: 1609242430}
-  endButton: {fileID: 680804184}
-  endBlockButton: {fileID: 1704624719}
   continueButton: {fileID: 635841319}
   target: {fileID: 1372675560}
   viewCamera: {fileID: 1043672582}

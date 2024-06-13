@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ExperimentGenerator : MonoBehaviour
 {
@@ -13,8 +14,6 @@ public class ExperimentGenerator : MonoBehaviour
 
     // Buttons
     public Button startButton;
-    public Button endButton;
-    public Button endBlockButton;
     public Button continueButton;
 
     // Others
@@ -31,8 +30,6 @@ public class ExperimentGenerator : MonoBehaviour
     private bool isWaitingForSubjectAnswer = false;
     private bool continueButtonPressed = false;
     private bool startButtonPressed = false;
-    private bool endButtonPressed = false;
-    private bool nextBlockButtonPressed = false;
 
     void Start()
     {
@@ -40,14 +37,15 @@ public class ExperimentGenerator : MonoBehaviour
         paddlePanel.gameObject.SetActive(false);
         startPanel.gameObject.SetActive(true);
         endPanel.gameObject.SetActive(false);
-        endBlockPanel.gameObject.SetActive(false);
         particles.create = true;
+        viewCamera.rotate = false;
 
         // Add button listeners
         continueButton.onClick.AddListener(OnContinueClick);
         startButton.onClick.AddListener(OnStartClick);
-        endButton.onClick.AddListener(OnEndClick);
-        endBlockButton.onClick.AddListener(OnNextBlockClick);
+
+        // Update Output file name with subject information
+       // CSVfile.UpdateSubjectInformationFile(Name_subject, Surname_subject, Number_subject);
     }
 
     void Update()
@@ -57,8 +55,8 @@ public class ExperimentGenerator : MonoBehaviour
         {
             if (CSVfile.ReadCSV_row())
             {
-                target.SetTarget(CSVfile.TargetDir);
-                target.SetDepth(CSVfile.DepthView); // Set the depth from CSV
+                // Assume CSVfile.TargetVelocity is the speed and CSVfile.FallAngle is the angle from the CSV file
+                target.SetTarget(CSVfile.FallAngle, CSVfile.TargetVelocity);
                 viewCamera.SetCamera(CSVfile.CameraDir);
                 startPanel.gameObject.SetActive(false);
                 target.startFalling();
@@ -96,15 +94,18 @@ public class ExperimentGenerator : MonoBehaviour
         // Step 5: Continue Button Click for Next Trial
         if (isWaitingForSubjectAnswer)
         {
-            float angle = adjustablePaddle.angleSlider.value; // Get the angle from the slider
-            CSVfile.UpdateCSVWithAngle(angle); // Update CSV with the provided angle
+            float responseAngle = adjustablePaddle.angleSlider.value; // Get the angle from the slider
+            CSVfile.UpdateCSVWithAngle(responseAngle); // Update CSV with the provided response angle
 
-            paddlePanel.gameObject.SetActive(false);
-            isWaitingForSubjectAnswer = false;
+            paddlePanel.gameObject.SetActive(false); // Deactivate answer panel
+            isWaitingForSubjectAnswer = false; // Reset flag
+
+            // Reset the slider to 0 after the subject has answered
+            adjustablePaddle.ResetSlider();
+
             if (CSVfile.ReadCSV_row())
             {
-                target.SetTarget(CSVfile.TargetDir);
-                target.SetDepth(CSVfile.DepthView); // Set the depth from CSV
+                target.SetTarget(CSVfile.FallAngle, CSVfile.TargetVelocity);
                 viewCamera.SetCamera(CSVfile.CameraDir);
                 target.startFalling();
                 isAnimationPlaying = true;
@@ -124,15 +125,5 @@ public class ExperimentGenerator : MonoBehaviour
     void OnStartClick()
     {
         startButtonPressed = true;
-    }
-
-    void OnNextBlockClick()
-    {
-        nextBlockButtonPressed = true;
-    }
-
-    void OnEndClick()
-    {
-        endButtonPressed = true;
     }
 }

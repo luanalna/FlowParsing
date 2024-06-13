@@ -5,18 +5,26 @@ using System.IO;
 public class CSVManager : MonoBehaviour
 {
     public TextAsset csvFile; // Reference to the CSV file
-    public float CameraDir; // Public member for speed
-    public float TargetDir; // Public member for direction
-    public float DepthView; // Public member for depth
-    public float Angle; // Public member for angle
+    public float CameraDir; // Public member for camera direction
+    public float TargetVelocity; // Public member for target speed
+    public float FallAngle; // Public member for fall angle
+    public float ResponseAngle; // Public member for response angle
     public static int rowCount = 1; // Static counter to track the number of rows read
 
     private List<DataRow> dataRows = new List<DataRow>(); // List to hold data rows
     private string filePath; // Path to the CSV file for writing
 
+
+    /* SUBJE T INFORMATION */
+    public string Name_subject = "Gia";
+    public string Surname_subject = "Patate";
+    public string Number_subject = "6";
+
     void Start()
     {
-        filePath = Path.Combine(Application.dataPath, "experiment_data.csv");
+        // UpdateSubjectCredentials()
+        string file_name =  Name_subject + "_" + Surname_subject + "_N_" + Number_subject + "_exp_data.csv";
+        filePath = Path.Combine(Application.dataPath, file_name);
         LoadCSV();
     }
 
@@ -31,47 +39,53 @@ public class CSVManager : MonoBehaviour
                 string[] row = data[i].Split(new char[] { ',' });
                 DataRow dataRow = new DataRow();
 
-                // Try to parse the Speed
-                if (float.TryParse(row[0], out float speed))
+                // Try to parse the Camera Direction
+                if (float.TryParse(row[0], out float cameraDir))
                 {
-                    dataRow.Speed = speed;
+                    dataRow.CameraDir = cameraDir;
                 }
                 else
                 {
-                    Debug.LogError($"Failed to parse Speed at row {i}: '{row[0]}'");
+                    Debug.LogError($"Failed to parse Camera Direction at row {i}: '{row[0]}'");
                     continue;
                 }
 
-                // Try to parse the Direction
-                if (float.TryParse(row[1], out float direction))
+                // Try to parse the Target Velocity
+                if (float.TryParse(row[1], out float targetVelocity_in))
                 {
-                    dataRow.Direction = direction;
+                    dataRow.TargetVelocity = targetVelocity_in;
                 }
                 else
                 {
-                    Debug.LogError($"Failed to parse Direction at row {i}: '{row[1]}'");
+                    Debug.LogError($"Failed to parse Target Speed at row {i}: '{row[1]}'");
                     continue;
                 }
 
-                // Try to parse the DepthView, if it exists
-                if (row.Length > 2 && float.TryParse(row[2], out float depth))
+
+                // Try to parse the Fall Angle
+                if (float.TryParse(row[2], out float fallAngle))
                 {
-                    dataRow.DepthView = depth;
+                    dataRow.FallAngle = fallAngle;
                 }
                 else
                 {
-                    dataRow.DepthView = 20f; // Default value if no depth is provided
+                    Debug.LogError($"Failed to parse Fall Angle at row {i}: '{row[2]}'");
+                    continue;
                 }
 
-                // Try to parse the Angle, if it exists
-                if (row.Length > 3 && float.TryParse(row[3], out float angle))
+/*                  // Try to parse the R
+                if (float.TryParse(row[2], out float fallAngle))
                 {
-                    dataRow.Angle = angle;
+                    dataRow.FallAngle = fallAngle;
                 }
                 else
                 {
-                    dataRow.Angle = 0f; // Default value if no angle is provided
-                }
+                    Debug.LogError($"Failed to parse Fall Angle at row {i}: '{row[2]}'");
+                    continue;
+                } */
+
+                // Initialize the Response Angle to a default value
+                dataRow.ResponseAngle = 0f; 
 
                 dataRows.Add(dataRow);
             }
@@ -84,10 +98,10 @@ public class CSVManager : MonoBehaviour
         {
             DataRow dataRow = dataRows[rowCount - 1];
 
-            CameraDir = dataRow.Speed;
-            TargetDir = dataRow.Direction;
-            DepthView = dataRow.DepthView;
-            Angle = dataRow.Angle;
+            CameraDir = dataRow.CameraDir;
+            TargetVelocity = dataRow.TargetVelocity;
+            FallAngle = dataRow.FallAngle;
+            //ResponseAngle = dataRow.ResponseAngle; // what is .ResponseAngle ??? why this name? is it a function? where is it?
 
             rowCount++;
             return true;
@@ -99,11 +113,11 @@ public class CSVManager : MonoBehaviour
         }
     }
 
-    public void UpdateCSVWithAngle(float angle)
+    public void UpdateCSVWithAngle(float responseAngle)
     {
         if (rowCount > 1 && rowCount <= dataRows.Count + 1)
         {
-            dataRows[rowCount - 2].Angle = angle;
+            dataRows[rowCount - 2].ResponseAngle = responseAngle;
             WriteCSV();
         }
     }
@@ -112,19 +126,20 @@ public class CSVManager : MonoBehaviour
     {
         using (StreamWriter writer = new StreamWriter(filePath))
         {
-            writer.WriteLine("CameraDir,TargetDir,DepthView,Angle"); // CSV header
+            writer.WriteLine("CameraDir,TargetVelocity,FallAngle,ResponseAngle"); // CSV header
             foreach (var row in dataRows)
             {
-                writer.WriteLine($"{row.Speed},{row.Direction},{row.DepthView},{row.Angle}");
+                writer.WriteLine($"{row.CameraDir},{row.TargetVelocity},{row.FallAngle},{row.ResponseAngle}");
             }
         }
     }
+
 }
 
 public class DataRow
 {
-    public float Speed { get; set; }
-    public float Direction { get; set; }
-    public float DepthView { get; set; }
-    public float Angle { get; set; }
+    public float CameraDir { get; set; }
+    public float TargetVelocity { get; set; }
+    public float FallAngle { get; set; }
+    public float ResponseAngle { get; set; }
 }

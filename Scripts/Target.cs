@@ -28,14 +28,14 @@ public class Target : MonoBehaviour
         }
     }
 
-   public void SetTarget(float angle, float velocity)//, float depth)
+   public void SetTarget(float angle, float velocity, float distance)
     {
         /* This function I suppose is called from the Experiment Manager or whatever
         and sets the target's initial conditions based on the input provided from 
         experiment file reading */
 
         /* Reset target's position */
-        //startingTargetPosition.z = depth; // Set the distance from subject. (Z axis in unity, at starting orientation)
+        startingTargetPosition.z = distance; // Set the distance from subject. (Z axis in unity, at starting orientation)
         transform.position = startingTargetPosition; // Reset the X and Y variables
 
         // Calculate the initial velocity based on the angle and speed

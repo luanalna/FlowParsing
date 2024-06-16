@@ -7,6 +7,7 @@ public class CSVManager : MonoBehaviour
     public TextAsset csvFile; // Reference to the CSV file
     public float CameraDir; // Public member for camera direction
     public float TargetVelocity; // Public member for target speed
+    public float TargetDistance; // Public member of target viewing distance
     public float FallAngle; // Public member for fall angle
     public float ResponseAngle; // Public member for response angle
     public static int rowCount = 1; // Static counter to track the number of rows read
@@ -73,16 +74,16 @@ public class CSVManager : MonoBehaviour
                     continue;
                 }
 
-/*                  // Try to parse the R
-                if (float.TryParse(row[2], out float fallAngle))
+                  // Try to parse the R
+                if (float.TryParse(row[3], out float targetDistance))
                 {
-                    dataRow.FallAngle = fallAngle;
+                    dataRow.TargetDistance = targetDistance;
                 }
                 else
                 {
-                    Debug.LogError($"Failed to parse Fall Angle at row {i}: '{row[2]}'");
+                    Debug.LogError($"Failed to parse Fall Angle at row {i}: '{row[3]}'");
                     continue;
-                } */
+                } 
 
                 // Initialize the Response Angle to a default value
                 dataRow.ResponseAngle = 0f; 
@@ -101,6 +102,7 @@ public class CSVManager : MonoBehaviour
             CameraDir = dataRow.CameraDir;
             TargetVelocity = dataRow.TargetVelocity;
             FallAngle = dataRow.FallAngle;
+            TargetDistance = dataRow.TargetDistance;
             //ResponseAngle = dataRow.ResponseAngle; // what is .ResponseAngle ??? why this name? is it a function? where is it?
 
             rowCount++;
@@ -126,10 +128,10 @@ public class CSVManager : MonoBehaviour
     {
         using (StreamWriter writer = new StreamWriter(filePath))
         {
-            writer.WriteLine("CameraDir,TargetVelocity,FallAngle,ResponseAngle"); // CSV header
+            writer.WriteLine("CameraDir,TargetVelocity,FallAngle,TargetDistance,ResponseAngle"); // CSV header
             foreach (var row in dataRows)
             {
-                writer.WriteLine($"{row.CameraDir},{row.TargetVelocity},{row.FallAngle},{row.ResponseAngle}");
+                writer.WriteLine($"{row.CameraDir},{row.TargetVelocity},{row.FallAngle},{row.TargetDistance},{row.ResponseAngle}");
             }
         }
     }
@@ -141,5 +143,6 @@ public class DataRow
     public float CameraDir { get; set; }
     public float TargetVelocity { get; set; }
     public float FallAngle { get; set; }
+    public float TargetDistance { get; set; }
     public float ResponseAngle { get; set; }
 }

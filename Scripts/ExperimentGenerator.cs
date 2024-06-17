@@ -31,7 +31,7 @@ public class ExperimentGenerator : MonoBehaviour
     private bool isWaitingForSubjectAnswer = false;
     private bool continueButtonPressed = false;
     private bool startButtonPressed = false;
-    private int currentTrial = 0;
+    public int currentTrial = 0;
 
     void Start()
     {
@@ -67,7 +67,7 @@ public class ExperimentGenerator : MonoBehaviour
         // Step 2: On "Continue" Button Click
         if (continueButtonPressed && !isAnimationPlaying && !isWaitingForSubjectAnswer)
         {
-            target.startFalling();
+            // target.startFalling();
             viewCamera.rotate = true;
             continueButtonPressed = false; // Reset flag
             StartCoroutine(WaitForAnimation());
@@ -75,32 +75,28 @@ public class ExperimentGenerator : MonoBehaviour
     }
 
     void HandleTrial()
-    {
 
-    if (currentTrial == 3 || currentTrial == 5)
-
-    {
-        endBlockPanel.gameObject.SetActive(true);
-        startPanel.gameObject.SetActive(false);
+{
+    if (currentTrial == 6 || currentTrial == 11)
+     {
         paddlePanel.gameObject.SetActive(false);
+        startPanel.gameObject.SetActive(false);
         endPanel.gameObject.SetActive(false);
-    }
-
-    else
-
-    {
-        // Assume CSVfile.TargetVelocity is the speed and CSVfile.FallAngle is the angle from the CSV file
+        endBlockPanel.gameObject.SetActive(true);
+            
+        }
+        else
+        {
+             // Assume CSVfile.TargetVelocity is the speed and CSVfile.FallAngle is the angle from the CSV file
                 target.SetTarget(CSVfile.FallAngle, CSVfile.TargetVelocity, CSVfile.TargetDistance);
                 viewCamera.SetCamera(CSVfile.CameraDir);
-                startPanel.gameObject.SetActive(false);
                 target.startFalling();
                 isAnimationPlaying = true;
-                startButtonPressed = false; // Reset flag
                 StartCoroutine(WaitForAnimation());
-    }
-
-    }
-
+                startButtonPressed = false; // Reset flag
+                startPanel.gameObject.SetActive(false);
+        }
+}
 
     IEnumerator WaitForAnimation()
     {
@@ -132,11 +128,7 @@ public class ExperimentGenerator : MonoBehaviour
 
             if (CSVfile.ReadCSV_row())
             {
-               /* viewCamera.SetCamera(CSVfile.CameraDir);
-                target.startFalling();
-                isAnimationPlaying = true;
-                StartCoroutine(WaitForAnimation());*/
-                 currentTrial++;
+               currentTrial++;
                 HandleTrial();
             }
             else
@@ -150,18 +142,20 @@ public class ExperimentGenerator : MonoBehaviour
         }
     }
 
-    void OnEndBlockClick()
+    void OnEndBlockClick ()
+
     {
-    // Hide the end block paneel and continue to the next trial
+                // Hide the end block panel and continue to the next trial
         endBlockPanel.gameObject.SetActive(false);
-          if (CSVfile.ReadCSV_row())
-        {
-            currentTrial++;
-            HandleTrial();
-        }
-
+        // Assume CSVfile.TargetVelocity is the speed and CSVfile.FallAngle is the angle from the CSV file
+                target.SetTarget(CSVfile.FallAngle, CSVfile.TargetVelocity, CSVfile.TargetDistance);
+                viewCamera.SetCamera(CSVfile.CameraDir);
+                target.startFalling();
+                isAnimationPlaying = true;
+                StartCoroutine(WaitForAnimation());
+                startButtonPressed = false; // Reset flag
+                startPanel.gameObject.SetActive(false);
     }
-
     void OnStartClick()
     {
         startButtonPressed = true;
